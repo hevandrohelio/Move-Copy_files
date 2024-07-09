@@ -3,10 +3,11 @@ import shutil
 from pathlib import Path
 
 
-class Mc_file:
+class Mc_file(object):
     def __init__(self, dir, new_dir):
         self.dir = dir
         self.new_dir = new_dir
+        self.qt_files = 0
         self.usefull_dir = Path(dir)
         self.dir_files = os.listdir(dir)
         self.all_ex_files_dir = []
@@ -23,6 +24,7 @@ class Mc_file:
                 for f in self.dir_files:
                     if e in f:
                         shutil.copy(fr'{self.dir}\{f}', fr'{self.new_dir}\{e}_files')
+                        self.qt_files += 1
         else:
             return 'Origin Directory not found.'
 
@@ -35,5 +37,13 @@ class Mc_file:
                 for f in self.dir_files:
                     if e in f:
                         shutil.move(fr'{self.dir}\{f}', fr'{self.new_dir}\{e}_files')
+                        self.qt_files += 1
         else:
             return 'Origin Directory not found.'
+
+    def scan(self):
+        for f in self.dir_files:
+            self.dir_files +=1
+            return self.dir_files
+    def show_qtd_files(self):
+        return self.qt_files

@@ -3,9 +3,10 @@ from tkinter import filedialog
 from tkinter import ttk
 import move_copy
 
-
 root = Tk()
-class App():
+
+
+class App(move_copy.Mc_file, object):
     def __init__(self):
         self.root = root
         self.window()
@@ -16,17 +17,29 @@ class App():
         self.root.title('Copiar ou Mover arquivos')
         self.root.geometry('720x600')
         self.root.resizable(False, False)
- 
+
     def open_origin_folder(self):
-        self.etr_odir = filedialog.askdirectory()
+        self.origin_path_text = filedialog.askdirectory()
+        self.change_origin_entry_text(self.origin_path_text)
+        print(self.origin_path_text)
+
     def open_new_folder(self):
-        self.etr_ndir = filedialog.askdirectory()
+        self.new_path_text = filedialog.askdirectory()
+        self.change_new_entry_text(self.new_path_text)
+        print(self.new_path_text)
+
+    def scan_folder(self):
+        self.origin_path_text = self.etr_odir.get()
+        self.new_path_text = self.etr_ndir.get()
+        self.lb_m = Label(self.root, text=f'Scanned')
+        self.lb_m.place(relx=0.45, rely=0.9)
 
     def copy_files(self):
-        move_copy.Mc_file(self.etr_odir, self.etr_ndir).copy()
+        move_copy.Mc_file(self.origin_path_text, self.new_path_text).copy()
+        self.is_file_copied()
     def move_files(self):
-        move_copy.Mc_file(self.etr_odir, self.etr_ndir).move()
-
+        move_copy.Mc_file(self.origin_path_text, self.new_path_text).move()
+        self.is_file_moved()
 
     def origin_new_dir(self):
         # Select Origin directory btn
@@ -39,36 +52,47 @@ class App():
 
         # Copy btn
         self.copy_btn = Button(self.root, text='Copy files', command=self.copy_files)
-        self.copy_btn.place(relx= 0.3, rely = 0.9, relwidth=0.15, relheight=0.05)
+        self.copy_btn.place(relx=0.3, rely=0.9, relwidth=0.15, relheight=0.05)
 
         # Move btn
         self.move_btn = Button(self.root, text='Move files', command=self.move_files)
         self.move_btn.place(relx=0.6, rely=0.9, relwidth=0.15, relheight=0.05)
 
+        # Scan Files btn
+        self.scan_btn = Button(self.root, text='Scan Folder', command=self.scan_folder)
+        self.scan_btn.place(relx=0.45, rely=0.8, relwidth=0.15, relheight=0.05)
+
         # Origin directory Entry
-        self.etr_odir = Entry(self.root)
+        self.origin_path_text = StringVar(root)
+
+        self.etr_odir = Entry(self.root, textvariable=self.origin_path_text)
+        self.etr_odir.pack()
         self.etr_odir.place(relx=0.1, rely=0.1, relwidth=0.68, relheight=0.05)
 
+
         # New Directory Entry
-        self.etr_ndir = Entry(self.root)
+        self.new_path_text = StringVar(root)
+
+        self.etr_ndir = Entry(self.root, textvariable=self.new_path_text)
+        self.etr_ndir.pack()
         self.etr_ndir.place(relx=0.1, rely=0.18, relwidth=0.68, relheight=0.05)
 
 
-        #tree view
-        self.list_files = ttk.Treeview(self.root, height=3, columns=("col1", "col2"))
-        self.list_files.heading("#0", text="")
-        self.list_files.heading("#1", text="file_name")
-        self.list_files.heading("#2", text="extension")
-        
-        self.list_files.column("#0", width=1)
-        self.list_files.column("#1", width=200)
-        self.list_files.column("#2", width=10)
+    def change_new_entry_text(self, text):
+        self.etr_ndir.delete(0, END)
+        self.etr_ndir.insert(0, text)
 
-        self.list_files.place(relx= 0.1, rely = 0.25, relwidth=0.85, relheight=0.5)
+    def change_origin_entry_text(self, text):
+        self.etr_odir.delete(0, END)
+        self.etr_odir.insert(0, text)
 
+    def is_file_moved(self):
+        self.lb_m = Label(self.root, text=f'Files moved')
+        self.lb_m.place(relx = 0.45, rely = 0.9)
 
+    def is_file_copied(self):
+        self.lb_m = Label(self.root, text=f'Files copied')
+        self.lb_m.place(relx = 0.45, rely = 0.9)
 
-
-    
 
 App()
