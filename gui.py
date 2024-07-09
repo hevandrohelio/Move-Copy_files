@@ -6,7 +6,7 @@ import move_copy
 root = Tk()
 
 
-class App(move_copy.Mc_file, object):
+class App(move_copy.Mc_file):
     def __init__(self):
         self.root = root
         self.window()
