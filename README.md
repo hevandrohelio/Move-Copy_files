@@ -2,7 +2,7 @@
 
 GUI to copy and move files in an organized way.
 
-![App](md\app.png)
+![App](md/app.png)
 
 ## How to use
 
